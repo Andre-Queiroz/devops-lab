@@ -1,0 +1,94 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: drone
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: drone
+  namespace: drone
+spec:
+  rules:
+    - host: drone.exemplo.localhost
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: drone
+                port:
+                  name: http
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: drone
+  namespace: drone
+spec:
+  selector:
+    app: drone
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: drone
+  namespace: drone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drone
+  template:
+    metadata:
+      labels:
+        app: drone
+    spec:
+      containers:
+        - name: drone
+          image: drone/drone:2.26
+          ports:
+            - name: http
+              containerPort: 80
+          env:
+            - name: DRONE_GITEA_CLIENT_ID
+              value: 95380f53-50f3-4037-b0a7-54b61f03f08d
+            - name: DRONE_GITEA_CLIENT_SECRET
+              value: gto_agq4yux5z4g6lgisdn4q7jbneae35ezo7zss6qjtvgd6oubotusq
+            - name: DRONE_GITEA_SERVER
+              value: http://gitea.exemplo.localhost
+            - name: DRONE_RPC_SECRET
+              value: d507a8a7d515f343a6f9caed4f370883
+            - name: DRONE_SERVER_HOST
+              value: drone.exemplo.localhost
+            - name: DRONE_SERVER_PROTO
+              value: http
+            - name: DRONE_USER_CREATE
+              value: username:root,admin:true
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      hostAliases:
+        - ip: 172.18.0.3
+          hostnames:
+            - gitea.exemplo.localhost
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
