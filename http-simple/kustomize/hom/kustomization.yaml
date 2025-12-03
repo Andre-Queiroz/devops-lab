@@ -1,9 +1,23 @@
 namespace: http-simple
 
 resources:
-  - configmap.yaml
   - deployment.yaml
   - ingress.yaml
-  - secret.yaml
   - service.yaml
   - namespace.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: http-simple-env
+    envs:
+      - .env
+  - name: http-simple-certificate
+    files:
+      - assets/certificate.pem
+
+secretGenerator:
+  - name: http-simple-key
+    files:
+      - assets/key.pem
