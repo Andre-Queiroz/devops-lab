@@ -63,9 +63,9 @@ spec:
               containerPort: 80
           env:
             - name: DRONE_GITEA_CLIENT_ID
-              value: 95380f53-50f3-4037-b0a7-54b61f03f08d
+              value: 4a35be8c-b3c6-4463-9f17-85f2f47176f7
             - name: DRONE_GITEA_CLIENT_SECRET
-              value: gto_agq4yux5z4g6lgisdn4q7jbneae35ezo7zss6qjtvgd6oubotusq
+              value: gto_ba7kih6hids4ek7ebdwalb34dl5iw6pxdnfhw7l32crimm74yy4q
             - name: DRONE_GITEA_SERVER
               value: http://gitea.exemplo.localhost
             - name: DRONE_RPC_SECRET

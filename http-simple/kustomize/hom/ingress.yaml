@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: http-simple
+  namespace: http-simple
+spec:
+  rules:
+    - host: http-simple.exemplo.localhost
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: http-simple
+                port:
+                  name: http
