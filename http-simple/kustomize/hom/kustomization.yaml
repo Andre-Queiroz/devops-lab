@@ -1,3 +1,5 @@
+namespace: http-simple
+
 resources:
   - configmap.yaml
   - deployment.yaml
